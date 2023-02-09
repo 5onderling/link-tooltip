@@ -1,0 +1,17 @@
+{
+  "version": "1.0.0",
+  "name": "link-tooltip",
+  "description": "An extension to display links in a tooltip above the link itself.",
+  "host_permissions": ["<all_urls>"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": [
+        "node_modules/@floating-ui/core/dist/floating-ui.core.umd.min.js",
+        "node_modules/@floating-ui/dom/dist/floating-ui.dom.umd.min.js",
+        "content-script.js"
+      ]
+    }
+  ],
+  "manifest_version": 3
+}
