@@ -1,27 +1,11 @@
-/** @type {HTMLDivElement} */
-let tooltip;
-/** @type {HTMLSpanElement} */
-let tooltipInner;
+import { computePosition, offset, flip, shift, autoUpdate } from '@floating-ui/dom';
+import { getTooltip, style } from './shared.js';
 
 /** @type {HTMLAnchorElement} */
 let lastLink;
 
 /** @type {() => void} */
 let cleanup;
-
-/**
- * @param {HTMLElement} element
- * @param {Partial<Record<keyof CSSStyleDeclaration, string>>} styles
- */
-const style = (element, styles) => {
-  for (const property in styles) {
-    element.style.setProperty(
-      property.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`),
-      styles[property],
-      'important',
-    );
-  }
-};
 
 /** @param {BetterMouseEvent | KeyboardEvent} event */
 const checkKeys = (event) => event.ctrlKey || event.metaKey;
@@ -36,33 +20,7 @@ const showToast = async (event) => {
 
   if (!checkKeys(event)) return;
 
-  const initial = !tooltip;
-  if (initial) {
-    tooltip = document.createElement('div');
-    style(tooltip, {
-      all: 'initial',
-      visibility: 'hidden',
-      position: 'absolute',
-      top: '0px',
-      left: '0px',
-      zIndex: '1000000000000',
-    });
-    tooltipInner = document.createElement('span');
-    style(tooltipInner, {
-      display: 'block',
-      fontSize: '0.75em',
-      backgroundColor: 'rgba(0,0,0,0.8)',
-      borderRadius: '0.25em',
-      padding: '0.25em 0.5em',
-      color: 'white',
-      fontFamily: 'sans-serif',
-    });
-    tooltip.append(tooltipInner);
-  }
-
-  tooltipInner.innerText = link.href;
-
-  if (initial) document.body.append(tooltip);
+  const tooltip = getTooltip(link.href);
 
   /** @param {KeyboardEvent} event */
   const hideToast = (event) => {
@@ -86,12 +44,8 @@ const showToast = async (event) => {
   let oldY = 0;
 
   const updatePosition = async () => {
-    const { x, y, placement, middlewareData } = await FloatingUIDOM.computePosition(link, tooltip, {
-      middleware: [
-        FloatingUIDOM.offset(5),
-        FloatingUIDOM.flip({ padding: 5 }),
-        FloatingUIDOM.shift({ padding: 5, crossAxis: true }),
-      ],
+    const { x, y, placement, middlewareData } = await computePosition(link, tooltip, {
+      middleware: [offset(5), flip({ padding: 5 }), shift({ padding: 5, crossAxis: true })],
       placement: 'top',
       strategy,
     });
@@ -114,7 +68,7 @@ const showToast = async (event) => {
     style(tooltip, { transition: 'transform 150ms ease' });
     tooltip.addEventListener('transitionend', () => style(tooltip, { transition: '' }));
   }
-  cleanup = FloatingUIDOM.autoUpdate(link, tooltip, updatePosition);
+  cleanup = autoUpdate(link, tooltip, updatePosition);
   lastLink = link;
 };
 
