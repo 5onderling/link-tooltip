@@ -9,7 +9,8 @@
       "js": [
         "node_modules/@floating-ui/core/dist/floating-ui.core.umd.min.js",
         "node_modules/@floating-ui/dom/dist/floating-ui.dom.umd.min.js",
-        "content-script.js"
+        "content-script-link.js",
+        "content-script-image.js"
       ]
     }
   ],
