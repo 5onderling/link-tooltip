@@ -1,20 +1,15 @@
-import { computePosition, offset, flip, shift, autoUpdate } from '@floating-ui/dom';
-import { getTooltip, style } from './shared.js';
+import { computePosition, offset, flip, shift, autoUpdate, Strategy } from '@floating-ui/dom';
+import { getTooltip, style } from './shared';
 
-/** @type {HTMLAnchorElement} */
-let lastLink;
+let lastLink: HTMLAnchorElement;
+let cleanup: () => void;
 
-/** @type {() => void} */
-let cleanup;
+const checkKeys = (event: BetterMouseEvent | KeyboardEvent) => event.ctrlKey || event.metaKey;
 
-/** @param {BetterMouseEvent | KeyboardEvent} event */
-const checkKeys = (event) => event.ctrlKey || event.metaKey;
-
-/** @param {BetterMouseEvent | KeyboardEvent} event */
-const showToast = async (event) => {
+const showToast = async (event: BetterMouseEvent | KeyboardEvent) => {
   const link =
     event instanceof KeyboardEvent
-      ? /** @type {HTMLAnchorElement[]} */ (Array.from(document.querySelectorAll('a:hover'))).pop()
+      ? Array.from(document.querySelectorAll<HTMLAnchorElement>('a:hover')).pop()
       : event.target?.closest('a');
   if (lastLink === link || !link?.href) return;
 
@@ -22,8 +17,7 @@ const showToast = async (event) => {
 
   const tooltip = getTooltip(link.href);
 
-  /** @param {KeyboardEvent} event */
-  const hideToast = (event) => {
+  const hideToast = (event: KeyboardEvent) => {
     if (checkKeys(event)) return;
 
     window.removeEventListener('keyup', hideToast);
@@ -36,10 +30,8 @@ const showToast = async (event) => {
   window.removeEventListener('keyup', hideToast);
   window.addEventListener('keyup', hideToast);
 
-  /** @type {string} */
-  let oldPlacement;
-  /** @type {import("@floating-ui/dom").Strategy} */
-  let strategy = 'absolute';
+  let oldPlacement: string;
+  let strategy: Strategy = 'absolute';
   let oldX = 0;
   let oldY = 0;
 

@@ -7,8 +7,8 @@
   "author": "",
   "license": "ISC",
   "scripts": {
-    "build": "rm -rf dist && cp -a public dist && esbuild src/main.js --bundle --format=esm --minify --outfile=dist/content-script.js",
-    "start": "rm -rf dist && cp -a public dist && esbuild src/main.js --bundle --format=esm --minify --sourcemap=inline --watch --outfile=dist/content-script.js"
+    "build": "rm -rf dist && cp -a public dist && esbuild src/main.ts --bundle --format=esm --minify --outfile=dist/content-script.js",
+    "start": "rm -rf dist && cp -a public dist && esbuild src/main.ts --bundle --format=esm --minify --sourcemap=inline --watch --outfile=dist/content-script.js"
   },
   "dependencies": {
     "@floating-ui/dom": "^1.1.1"

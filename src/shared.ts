@@ -1,10 +1,9 @@
 export const wait = (time = 100) => new Promise((resolve) => setTimeout(resolve, time));
 
-/**
- * @param {HTMLElement} element
- * @param {Partial<Record<keyof CSSStyleDeclaration, string>>} styles
- */
-export const style = (element, styles) => {
+export const style = (
+  element: HTMLElement,
+  styles: Partial<Record<keyof CSSStyleDeclaration, string>>,
+) => {
   for (const property in styles) {
     element.style.setProperty(
       property.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`),
@@ -14,12 +13,9 @@ export const style = (element, styles) => {
   }
 };
 
-/** @type {HTMLDivElement} */
-let tooltip;
-/** @type {HTMLSpanElement} */
-let tooltipInner;
-/** @param {string} text */
-export const getTooltip = (text) => {
+let tooltip: HTMLDivElement;
+let tooltipInner: HTMLSpanElement;
+export const getTooltip = (text: string) => {
   const initial = !tooltip;
   if (initial) {
     tooltip = document.createElement('div');

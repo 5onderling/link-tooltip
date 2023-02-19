@@ -1,39 +1,31 @@
 // TODO: FOR BACKGROUND IMAGES TOO?! Maybe not svg, so not icons
 
-import { computePosition, offset, shift, autoUpdate } from '@floating-ui/dom';
-import { getTooltip, style, wait } from './shared.js';
+import { computePosition, offset, shift, autoUpdate, Strategy } from '@floating-ui/dom';
+import { getTooltip, style, wait } from './shared';
 
-/** @type {HTMLImageElement} */
-let lastImage;
-
-/** @type {() => void} */
-let cleanup;
-
-/**
- * @param {HTMLImageElement} img
- * @returns {Promise<{ w: number, h: number }>}
- */
-const getImageSize = async (img) => {
+const getImageSize = async (img: HTMLImageElement): Promise<{ w: number; h: number }> => {
   if (img.naturalWidth && img.naturalHeight) return { w: img.naturalWidth, h: img.naturalHeight };
   await wait();
   return getImageSize(img);
 };
 
-/** @param {KeyboardEvent} event */
-const showImageSize = async (event) => {
-  if (event.key !== 's') return;
+let lastImage: HTMLImageElement;
+let cleanup: () => void;
 
-  /** @type {HTMLImageElement} */
-  const img = document.querySelector('img:hover');
+const checkKeys = (event: KeyboardEvent) => event.key === 's';
+
+const showImageSize = async (event: KeyboardEvent) => {
+  if (!checkKeys(event)) return;
+
+  const img = document.querySelector<HTMLImageElement>('img:hover');
   if (!img || lastImage === img) return;
 
   const { w, h } = await getImageSize(img);
 
   const tooltip = getTooltip(`${w} x ${h}`);
 
-  /** @param {KeyboardEvent} event */
-  const hideToast = (event) => {
-    if (event.key !== 's') return;
+  const hideToast = (event: KeyboardEvent) => {
+    if (!checkKeys(event)) return;
 
     window.removeEventListener('keyup', hideToast);
 
@@ -45,8 +37,7 @@ const showImageSize = async (event) => {
   window.removeEventListener('keyup', hideToast);
   window.addEventListener('keyup', hideToast);
 
-  /** @type {import("@floating-ui/dom").Strategy} */
-  let strategy = 'absolute';
+  let strategy: Strategy = 'absolute';
   let oldX = 0;
   let oldY = 0;
 
