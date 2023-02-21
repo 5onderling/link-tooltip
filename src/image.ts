@@ -12,7 +12,7 @@ const getImageSize = async (img: HTMLImageElement): Promise<{ w: number; h: numb
 let lastImage: HTMLImageElement;
 let cleanup: () => void;
 
-const checkKeys = (event: KeyboardEvent) => event.key === 's';
+const checkKeys = (event: KeyboardEvent) => !event.ctrlKey && !event.metaKey && event.key === 's';
 
 const showImageSize = async (event: KeyboardEvent) => {
   if (!checkKeys(event)) return;
