@@ -1,4 +1,4 @@
-export const wait = (time = 100) => new Promise((resolve) => setTimeout(resolve, time));
+export const wait = (time = 100) => new Promise<void>((resolve) => setTimeout(resolve, time));
 
 export const style = (
   element: HTMLElement,

@@ -18,10 +18,13 @@ const showImageSize = async (event: KeyboardEvent) => {
   if (!checkKeys(event)) return;
 
   const img = document.querySelector<HTMLImageElement>('img:hover');
-  if (!img || lastImage === img) return;
+  if (!img) return;
+
+  event.preventDefault();
+
+  if (lastImage === img) return;
 
   const { w, h } = await getImageSize(img);
-
   const tooltip = getTooltip(`${w} x ${h}`);
 
   const hideToast = (event: KeyboardEvent) => {
@@ -44,10 +47,13 @@ const showImageSize = async (event: KeyboardEvent) => {
   const updatePosition = async () => {
     const { x, y, middlewareData } = await computePosition(img, tooltip, {
       middleware: [
-        offset(({ rects }) => -rects.reference.height / 2 - rects.floating.height / 2),
+        offset(({ rects }) => ({
+          mainAxis: -rects.reference.height / 2 - rects.floating.height / 2,
+          crossAxis: rects.reference.width / 2 - rects.floating.width / 2,
+        })),
         shift({ padding: 5, crossAxis: true }),
       ],
-      placement: 'bottom',
+      placement: 'bottom-start',
       strategy,
     });
     if (oldX === x && oldY === y) return;
