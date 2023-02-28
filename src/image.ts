@@ -32,7 +32,7 @@ const showImageSize = async (event: KeyboardEvent) => {
 
     window.removeEventListener('keyup', hideToast);
 
-    style(tooltip, { visibility: 'hidden' });
+    style(tooltip, { visibility: 'hidden', transform: '' });
     lastImage = undefined;
     if (cleanup) cleanup(), (cleanup = undefined);
   };
