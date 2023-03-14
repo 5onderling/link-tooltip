@@ -27,18 +27,27 @@ const showImageSize = async (event: KeyboardEvent) => {
   const { w, h } = await getImageSize(img);
   const tooltip = getTooltip(`${w} x ${h}`);
 
-  const hideToast = (event: KeyboardEvent) => {
-    if (!checkKeys(event)) return;
+  const hideToast = (event?: KeyboardEvent) => {
+    if (event && !checkKeys(event)) return;
 
     window.removeEventListener('keyup', hideToast);
+    window.removeEventListener('keydown', downloadImage);
 
     style(tooltip, { visibility: 'hidden', transform: '' });
     lastImage = undefined;
     if (cleanup) cleanup(), (cleanup = undefined);
   };
-
   window.removeEventListener('keyup', hideToast);
   window.addEventListener('keyup', hideToast);
+
+  const downloadImage = (event: KeyboardEvent) => {
+    if (event.key !== 'd') return;
+
+    chrome.runtime.sendMessage(img.src);
+    hideToast();
+  };
+  window.removeEventListener('keydown', downloadImage);
+  window.addEventListener('keydown', downloadImage);
 
   let strategy: Strategy = 'absolute';
   let oldX = 0;

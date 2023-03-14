@@ -10,3 +10,4 @@ A chromium browser extension to display links in a tooltip above the link itself
 1. Go to `chrome://extensions/` and enable developer mode
 1. Click "Load unpacked" and select the `<repo_location>/dist` folder
 1. Press the control or meta key (Win on Windows / Command on MacOS) while hovering over links on webpages to show the tooltip containing the link url <br> or <br> Press the "S" key while hovering over images on webpages to show a tooltip containing the images size
+1. When showing the image size you can press the "D" key to download the image
