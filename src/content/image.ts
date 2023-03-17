@@ -43,14 +43,15 @@ const showImageSize = async (event: KeyboardEvent) => {
   const downloadImage = async (event: KeyboardEvent) => {
     if (event.key !== 'd') return;
 
-    await chrome.runtime.sendMessage(img.src);
-    const anchor = document.createElement('a');
-    anchor.href = img.src;
-    style(anchor, { display: 'none' });
-    document.body.append(anchor);
-    anchor.click();
-    anchor.remove();
-
+    const res = await chrome.runtime.sendMessage(img.src);
+    if (res) {
+      const anchor = document.createElement('a');
+      anchor.href = img.src;
+      style(anchor, { display: 'none' });
+      document.body.append(anchor);
+      anchor.click();
+      anchor.remove();
+    }
     hideToast();
   };
   window.removeEventListener('keydown', downloadImage);

@@ -2,7 +2,7 @@
   "version": "1.0.0",
   "name": "link-tooltip",
   "description": "An extension to display links in a tooltip above the link itself.",
-  "permissions": ["webRequest", "declarativeNetRequest"],
+  "permissions": ["webRequest", "declarativeNetRequest", "downloads"],
   "host_permissions": ["<all_urls>"],
   "background": { "service_worker": "/background.js", "type": "module" },
   "content_scripts": [{ "matches": ["<all_urls>"], "js": ["content.js"] }],
