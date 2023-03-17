@@ -4,6 +4,6 @@
     "outDir": "dist",
     "noImplicitAny": true,
     "skipLibCheck": false,
-    "types": ["./types", "chrome-types"]
+    "types": ["./types", "@types/chrome"]
   }
 }
