@@ -19,7 +19,13 @@ chrome.webRequest.onHeadersReceived.addListener(
 
     urlToFilename[url] = `${filenameWithoutExtension}.${extension}`;
   },
-  { urls: ['<all_urls>'], types: [chrome.declarativeNetRequest.ResourceType.IMAGE] },
+  {
+    urls: ['<all_urls>'],
+    types: [
+      chrome.declarativeNetRequest.ResourceType.IMAGE,
+      chrome.declarativeNetRequest.ResourceType.MAIN_FRAME,
+    ],
+  },
   ['responseHeaders'],
 );
 
