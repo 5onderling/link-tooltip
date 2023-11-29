@@ -1,4 +1,3 @@
-// maybe use downloads api for local files (starting with file:// probably) or simply a with download attribute (not header, cause no network)
 import * as mime from 'mime/lite';
 
 const urlToFilename: Record<string, string> = {};
