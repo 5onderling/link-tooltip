@@ -1,6 +1,6 @@
 // TODO: FOR BACKGROUND IMAGES TOO?! Maybe not svg, so not icons
 
-import { computePosition, offset, shift, autoUpdate, Strategy } from '@floating-ui/dom';
+import { autoUpdate, computePosition, offset, shift, Strategy } from '@floating-ui/dom';
 import { getTooltip, style, wait } from './shared';
 
 const getImageSize = async (img: HTMLImageElement): Promise<{ w: number; h: number }> => {
@@ -43,10 +43,15 @@ const showImageSize = async (event: KeyboardEvent) => {
   const downloadImage = async (event: KeyboardEvent) => {
     if (event.key !== 'd') return;
 
-    const res = await chrome.runtime.sendMessage(img.src);
+    const srcUrl = new URL(img.src);
+
+    // always download the best/original file from twitter
+    if (srcUrl.host === 'pbs.twimg.com') srcUrl.searchParams.set('name', 'orig');
+
+    const res = await chrome.runtime.sendMessage(srcUrl.href);
     if (res) {
       const anchor = document.createElement('a');
-      anchor.href = img.src;
+      anchor.href = srcUrl.href;
       style(anchor, { display: 'none' });
       document.body.append(anchor);
       anchor.click();

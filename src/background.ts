@@ -1,33 +1,3 @@
-import * as mime from 'mime/lite';
-
-const urlToFilename: Record<string, string> = {};
-chrome.webRequest.onHeadersReceived.addListener(
-  ({ url, responseHeaders }) => {
-    const contentType = responseHeaders?.find((h) => h.name === 'content-type')?.value;
-    if (!contentType) return;
-
-    let extension = mime.getExtension(contentType);
-    if (!extension) return;
-    if (extension === 'jpeg') extension = 'jpg';
-
-    const urlObj = new URL(url);
-    const filename = urlObj.pathname.split('/').pop();
-    const filenameWithoutExtension = filename.includes('.')
-      ? filename.split('.').slice(0, -1).join('.')
-      : filename;
-
-    urlToFilename[url] = `${filenameWithoutExtension}.${extension}`;
-  },
-  {
-    urls: ['<all_urls>'],
-    types: [
-      chrome.declarativeNetRequest.ResourceType.IMAGE,
-      chrome.declarativeNetRequest.ResourceType.MAIN_FRAME,
-    ],
-  },
-  ['responseHeaders'],
-);
-
 const downloadedHeaderKey = 'x-chrome-extension-downloaded-header';
 const downloadedHeaderValue = 'true';
 const downloadedRuleId = 1;
@@ -38,9 +8,6 @@ chrome.runtime.onMessage.addListener((url: string, _, sendResposnse) => {
     return sendResposnse(false);
   }
 
-  const filename = urlToFilename[url];
-  if (!filename) return sendResposnse(false);
-
   const rule: chrome.declarativeNetRequest.Rule = {
     id: downloadedRuleId,
     priority: 1,
@@ -50,7 +17,7 @@ chrome.runtime.onMessage.addListener((url: string, _, sendResposnse) => {
         {
           operation: chrome.declarativeNetRequest.HeaderOperation.SET,
           header: 'Content-Disposition',
-          value: `attachment; filename=${filename}`,
+          value: `attachment;`,
         },
         {
           operation: chrome.declarativeNetRequest.HeaderOperation.SET,

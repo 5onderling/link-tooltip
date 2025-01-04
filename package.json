@@ -11,8 +11,7 @@
     "start": "rm -rf dist && cp -a public dist && esbuild src/background.ts src/content.ts --bundle --format=esm --minify --sourcemap=inline --watch --outdir=dist"
   },
   "dependencies": {
-    "@floating-ui/dom": "^1.1.1",
-    "mime": "^3.0.0"
+    "@floating-ui/dom": "^1.1.1"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.224",
