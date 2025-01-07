@@ -48,6 +48,13 @@ const showImageSize = async (event: KeyboardEvent) => {
     // always download the best/original file from twitter
     if (srcUrl.host === 'pbs.twimg.com') srcUrl.searchParams.set('name', 'orig');
 
+    // reddit
+    if (srcUrl.host === 'preview.redd.it') {
+      srcUrl.host = 'i.redd.it';
+      srcUrl.pathname = srcUrl.pathname.split('-').pop();
+      srcUrl.search = '';
+    }
+
     const res = await chrome.runtime.sendMessage(srcUrl.href);
     if (res) {
       const anchor = document.createElement('a');

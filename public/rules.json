@@ -1,0 +1,11 @@
+[
+  {
+    "id": 2,
+    "priority": 1,
+    "action": {
+      "type": "modifyHeaders",
+      "requestHeaders": [{ "header": "accept", "operation": "set", "value": "image/*" }]
+    },
+    "condition": { "urlFilter": "https://i.redd.it/*", "resourceTypes": ["main_frame"] }
+  }
+]
